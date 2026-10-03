@@ -21,20 +21,18 @@ const {
 //
 // ADMIN-SIDE USERS:
 //
-// super_admin
-// admin
-// content_manager
+// super_user
 //
 // These users can VIEW admin-side eBooks.
 //
 // IMPORTANT:
 //
-// Only super_admin can:
+// Only super_user can:
 // - Add adminKeywords
 // - Remove adminKeywords
 // - Replace adminKeywords
 //
-// admin/content_manager:
+// super_user:
 // - Can view adminKeywords
 // - Cannot modify adminKeywords
 //
@@ -44,9 +42,7 @@ const {
 // ============================================================
 
 const ADMIN_ROLES = [
-  'super_admin',
-  'admin',
-  'content_manager',
+  'super_user',
 ];
 
 
@@ -58,7 +54,7 @@ const isAdminUser = (user) => {
 
 
 const isSuperAdmin = (user) => {
-  return user?.role === 'super_admin';
+  return user?.role === 'super_user';
 };
 
 
@@ -178,9 +174,7 @@ const sanitizeEbookForPublic = (ebook) => {
 //
 // ADMIN SIDE:
 //
-// super_admin
-// admin
-// content_manager
+// super_user
 //
 // => adminKeywords visible
 //
@@ -516,7 +510,6 @@ exports.getEbooks =
 
   });
 
-
 // ============================================================
 // GET EBOOK BY SLUG
 // ============================================================
@@ -645,13 +638,11 @@ exports.getEbookBySlug =
 //
 // ADMIN-SIDE USERS:
 //
-// super_admin
-// admin
-// content_manager
+// super_user
 //
 // KEYWORD PERMISSION:
 //
-// Only super_admin can add keywords.
+// Only super_user can add keywords.
 //
 // ============================================================
 
@@ -780,9 +771,9 @@ exports.createEbook =
     // ADMIN KEYWORDS
     // ----------------------------------------------------------
     //
-    // ONLY SUPER ADMIN.
+    // ONLY SUPER USER.
     //
-    // If admin/content_manager sends adminKeywords,
+    // If a non-super-user sends adminKeywords,
     // they will NOT be saved.
     //
     // ----------------------------------------------------------
@@ -891,7 +882,7 @@ exports.createEbook =
 //
 // Can edit normal eBook fields.
 //
-// ONLY SUPER ADMIN:
+// ONLY SUPER USER:
 //
 // Can modify adminKeywords.
 //
@@ -999,9 +990,9 @@ exports.updateEbook =
     // ADMIN KEYWORDS
     // ==========================================================
     //
-    // ONLY SUPER ADMIN.
+    // ONLY SUPER USER.
     //
-    // Super Admin can completely replace the keyword list.
+    // Super User can completely replace the keyword list.
     //
     // Existing:
     //
@@ -1038,7 +1029,7 @@ exports.updateEbook =
 
         throw new ApiError(
           403,
-          'Only super admin can add, remove or change eBook keywords.'
+          'Only super user can add, remove or change eBook keywords.'
         );
 
       }
@@ -1194,7 +1185,6 @@ exports.updateEbook =
 
   });
 
-
 // ============================================================
 // DELETE EBOOK
 // ============================================================
@@ -1311,7 +1301,7 @@ exports.deleteEbook =
 //
 // GET /api/ebooks/admin/all
 //
-// ADMIN-SIDE USERS ONLY
+// ADMIN-SIDE USERS
 //
 // adminKeywords visible.
 //
