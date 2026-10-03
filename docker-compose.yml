@@ -1,0 +1,45 @@
+services:
+
+  mongodb:
+    image: mongo:7
+    container_name: drforhealth-mongodb
+    restart: unless-stopped
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - drforhealth-network
+
+  backend:
+    image: drforhealth-backend:latest
+    container_name: drforhealth-backend
+    restart: unless-stopped
+    env_file:
+      - ./drforhealth-backend/.env
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      MONGO_URI: mongodb://mongodb:27017/drforhealth
+    depends_on:
+      - mongodb
+    expose:
+      - "5000"
+    networks:
+      - drforhealth-network
+
+  frontend:
+    image: drforhealth-frontend:latest
+    container_name: drforhealth-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+    networks:
+      - drforhealth-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  drforhealth-network:
+    driver: bridge
